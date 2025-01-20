@@ -3,6 +3,7 @@ import CredentialsProvider from "next-auth/providers/credentials";
 import { ICreateAdminInput } from "learning/feature/managers/type";
 import { findAdminByEmail } from "learning/feature/managers/model";
 import { comparePassword } from "learning/utils/common/password";
+import { loginSchema } from "learning/feature/managers/rule";
 
 const adminLogin = async (email: string, password: string) => {
   const existedAdmin = await findAdminByEmail(email);
@@ -31,6 +32,12 @@ export const authOptions: NextAuthOptions = {
       credentials: {},
       async authorize(credentials, req) {
         const { email, password } = credentials as ICreateAdminInput;
+
+        const data = loginSchema.safeParse({ email, password });
+        if (!data.success) {
+          const message = JSON.parse(data.error.message);
+          throw Error(message.map((i: any) => i.message).join(", "));
+        }
         return adminLogin(email, password);
       },
     }),

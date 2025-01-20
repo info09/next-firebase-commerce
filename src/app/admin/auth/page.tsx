@@ -24,12 +24,15 @@ import {
   FormLabel,
   FormMessage,
 } from "learning/components/ui/form";
+import { loginSchema } from "learning/feature/managers/rule";
+import { zodResolver } from "@hookform/resolvers/zod";
 
 export default function AuthPage() {
   const route = useRouter();
 
   const form = useForm<ICreateAdminInput>({
     mode: "onBlur",
+    resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
       password: "",
@@ -50,7 +53,7 @@ export default function AuthPage() {
         redirect: false,
       });
       if (res?.error) {
-        toast.error(res.error);
+        toast.error(`Cannot login, ${res.error || "check email or password"}`);
       } else {
         route.push("/admin");
       }
@@ -109,16 +112,6 @@ export default function AuthPage() {
                         <FormField
                           control={control}
                           name="email"
-                          rules={{
-                            required: {
-                              value: true,
-                              message: "Email is required.",
-                            },
-                            pattern: {
-                              value: /^\S+@\S+\.\S+$/,
-                              message: "Email is invalid.",
-                            },
-                          }}
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Email</FormLabel>
@@ -135,17 +128,6 @@ export default function AuthPage() {
                         <FormField
                           control={control}
                           name="password"
-                          rules={{
-                            required: {
-                              value: true,
-                              message: "Password is required.",
-                            },
-                            minLength: {
-                              value: 6,
-                              message:
-                                "Password must be at least 6 characters.",
-                            },
-                          }}
                           render={({ field }) => (
                             <FormItem>
                               <FormLabel>Password</FormLabel>
