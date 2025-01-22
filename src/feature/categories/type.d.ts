@@ -4,7 +4,7 @@ export interface ICreateCategoryInput {
   name: string;
   slug: string;
   description: string;
-  image: string[];
+  image?: string[];
 }
 
 export interface ICategoryDb extends ICreateCategoryInput, IDocDb {}

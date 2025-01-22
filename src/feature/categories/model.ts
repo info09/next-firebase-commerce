@@ -1,7 +1,17 @@
-import { collection, getDocs, query, where } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  getDoc,
+  getDocs,
+  query,
+  Timestamp,
+  where,
+} from "firebase/firestore";
 import { db } from "learning/utils/firebase";
 import { COLLECTION } from "learning/constants/common";
-import { ICategoryDb, ICategoryDoc } from "./type";
+import { ICategoryDb, ICategoryDoc, ICreateCategoryInput } from "./type";
+import { AddCategorySchema } from "./rule";
+import { formatZodMessage } from "learning/utils/common/zod-message";
 
 const categoriesRef = collection(db, COLLECTION.CATEGORY);
 export const getCategoryBySlug = async (slug: string) => {
@@ -10,7 +20,7 @@ export const getCategoryBySlug = async (slug: string) => {
   );
 
   if (!existedCategory.docs[0]) {
-    throw Error("Category is not exists");
+    return undefined;
   }
 
   const category = existedCategory.docs[0].data() as ICategoryDoc;
@@ -28,4 +38,28 @@ export const getCategories = async (): Promise<ICategoryDb[]> => {
     id: d.id,
   }));
   return categories;
+};
+
+export const addCategory = async (
+  data: ICreateCategoryInput
+): Promise<ICategoryDb> => {
+  const test = AddCategorySchema.safeParse(data);
+  if (!test.success) {
+    const message = formatZodMessage(test.error);
+    throw Error(message);
+  }
+
+  const existedCategory = await getCategoryBySlug(data.slug);
+  if (existedCategory) {
+    throw Error("Slug have been used!");
+  }
+
+  const newCategoryRef = await addDoc(categoriesRef, {
+    ...data,
+    created_at: Timestamp.now(),
+    updated_at: Timestamp.now(),
+  });
+
+  const newCategory = await getDoc(newCategoryRef);
+  return { id: newCategory.id, ...(newCategory.data() as ICategoryDoc) };
 };
