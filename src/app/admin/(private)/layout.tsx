@@ -1,31 +1,21 @@
 import { Toaster } from "learning/components/ui/sonner";
-import Image from "next/image";
 import Link from "next/link";
 
 import {
   Boxes,
-  File,
   Home,
-  icons,
-  LineChart,
-  ListFilter,
-  MoreHorizontal,
   Package,
-  Package2,
   PanelLeft,
-  PlusCircle,
   Search,
   Settings,
-  ShoppingCart,
+  User,
   Users,
-  Users2,
 } from "lucide-react";
 
 import { Button } from "learning/components/ui/button";
 
 import {
   DropdownMenu,
-  DropdownMenuCheckboxItem,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuLabel,
@@ -48,6 +38,7 @@ import {
 import { getServerSession } from "next-auth";
 import { authOptions } from "learning/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
+import Logout from "learning/components/common/logout";
 
 export const ADMIN_PAGES = [
   {
@@ -160,22 +151,18 @@ export default async function RootLayout({
                 size="icon"
                 className="overflow-hidden rounded-full"
               >
-                <Image
-                  src="/placeholder-user.jpg"
-                  width={36}
-                  height={36}
-                  alt="Avatar"
-                  className="overflow-hidden rounded-full"
-                />
+                <User className="w-6 h-6" />
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuLabel>{session.user.email}</DropdownMenuLabel>
               <DropdownMenuSeparator />
               <DropdownMenuItem>Settings</DropdownMenuItem>
               <DropdownMenuItem>Support</DropdownMenuItem>
               <DropdownMenuSeparator />
-              <DropdownMenuItem>Logout</DropdownMenuItem>
+              <DropdownMenuItem>
+                <Logout />
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </header>

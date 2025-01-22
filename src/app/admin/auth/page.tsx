@@ -116,7 +116,11 @@ export default function AuthPage() {
                             <FormItem>
                               <FormLabel>Email</FormLabel>
                               <FormControl>
-                                <Input placeholder="Email" {...field} />
+                                <Input
+                                  placeholder="Email"
+                                  autoComplete="off"
+                                  {...field}
+                                />
                               </FormControl>
 
                               <FormMessage />
