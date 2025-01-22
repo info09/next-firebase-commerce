@@ -45,6 +45,9 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "learning/components/ui/tooltip";
+import { getServerSession } from "next-auth";
+import { authOptions } from "learning/app/api/auth/[...nextauth]/route";
+import { redirect } from "next/navigation";
 
 export const ADMIN_PAGES = [
   {
@@ -69,11 +72,16 @@ export const ADMIN_PAGES = [
   },
 ];
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  var session = await getServerSession(authOptions);
+  if (!session?.user) {
+    redirect("/admin/auth");
+  }
+
   return (
     <div className="flex min-h-screen w-full flex-col bg-muted/40">
       <aside className="fixed inset-y-0 left-0 z-10 hidden w-14 flex-col border-r bg-background sm:flex">

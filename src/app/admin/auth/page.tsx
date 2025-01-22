@@ -55,7 +55,7 @@ export default function AuthPage() {
       if (res?.error) {
         toast.error(`Cannot login, ${res.error || "check email or password"}`);
       } else {
-        route.push("/admin");
+        route.push("/admin/dashboards");
       }
     } catch (error) {
       toast.error("Something went wrong");
