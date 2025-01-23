@@ -1,3 +1,4 @@
+import SearchBar from "learning/components/common/search";
 import { Button } from "learning/components/ui/button";
 import {
   Select,
@@ -15,6 +16,7 @@ const TableHeader = () => {
   return (
     <div className="mb-6">
       <div className="flex items-center">
+        <SearchBar />
         <Select value="ID">
           <SelectTrigger className="w-[100px] py-1">
             <SelectValue placeholder="Theme" />
