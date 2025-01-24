@@ -16,4 +16,6 @@ export interface IGetCategoryInput {
   keyword: string;
   page: number;
   size?: number;
+  orderField: string;
+  orderType: "asc" | "desc";
 }

@@ -1,3 +1,4 @@
+import OrderData from "learning/components/common/order-data";
 import SearchBar from "learning/components/common/search";
 import { Button } from "learning/components/ui/button";
 import {
@@ -17,27 +18,7 @@ const TableHeader = () => {
     <div className="mb-6">
       <div className="flex items-center">
         <SearchBar />
-        <Select value="ID">
-          <SelectTrigger className="w-[100px] py-1">
-            <SelectValue placeholder="Theme" />
-          </SelectTrigger>
-          <SelectContent>
-            <SelectItem value="ID">ID</SelectItem>
-            <SelectItem value="dark">Name</SelectItem>
-            <SelectItem value="system">Created At</SelectItem>
-            <SelectItem value="system">Updated At</SelectItem>
-          </SelectContent>
-        </Select>
-        <Tabs defaultValue="all">
-          <TabsList>
-            <TabsTrigger value="all">
-              <ArrowUp className="h-3.5 w-3.5" />
-            </TabsTrigger>
-            <TabsTrigger value="active">
-              <ArrowDown className="h-3.5 w-3.5" />
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
+        <OrderData />
         <div className="ml-auto flex items-center gap-2">
           <Button size="sm" className="h-8 gap-1">
             <PlusCircle className="h-3.5 w-3.5" />
