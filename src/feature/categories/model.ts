@@ -1,6 +1,7 @@
 import {
   addDoc,
   collection,
+  doc,
   endAt,
   getCountFromServer,
   getDoc,
@@ -12,6 +13,7 @@ import {
   startAfter,
   startAt,
   Timestamp,
+  updateDoc,
   where,
 } from "firebase/firestore";
 import { db } from "learning/utils/firebase";
@@ -65,6 +67,48 @@ export const addCategory = async (
   });
 
   const newCategory = await getDoc(newCategoryRef);
+  return { id: newCategory.id, ...(newCategory.data() as ICategoryDoc) };
+};
+
+export const getCategoryById = async (id: string) => {
+  const existedCategory = await getDoc(doc(categoriesRef, id));
+  if (!existedCategory) {
+    return undefined;
+  }
+  const category = existedCategory.data() as ICategoryDoc;
+  return {
+    ...category,
+    id: existedCategory.id,
+  };
+};
+
+export const updateCategory = async (
+  id: string,
+  data: ICreateCategoryInput
+): Promise<ICategoryDb> => {
+  const test = AddCategorySchema.safeParse(data);
+
+  if (!test.success) {
+    const message = formatZodMessage(test.error);
+    throw Error(message);
+  }
+
+  const oldCategory = await getDoc(doc(categoriesRef, id));
+
+  if (oldCategory.data() && data.slug !== (oldCategory.data() as any)?.slug) {
+    const existedCategory = await getCategoryBySlug(data.slug);
+    if (existedCategory) {
+      throw Error("Slug have been used!");
+    }
+  }
+
+  await updateDoc(doc(categoriesRef, id), {
+    ...data,
+    updated_at: Timestamp.now(),
+  });
+
+  const newCategory = await getDoc(doc(categoriesRef, id));
+
   return { id: newCategory.id, ...(newCategory.data() as ICategoryDoc) };
 };
 

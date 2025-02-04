@@ -10,6 +10,7 @@ import { ICategoryDb } from "learning/feature/categories/type";
 import { Pencil, Trash } from "lucide-react";
 import React from "react";
 import moment from "moment";
+import Link from "next/link";
 
 interface IProps {
   data: ICategoryDb[];
@@ -39,7 +40,9 @@ const CategoryTable = ({ data }: IProps) => {
             </TableCell>
             <TableCell>
               <div className="flex gap-1 cursor-pointer">
-                <Pencil />
+                <Link href={"/admin/categories/update/" + category.id}>
+                  <Pencil className="w-5 h-5" />
+                </Link>
                 <Trash />
               </div>
             </TableCell>
