@@ -111,3 +111,11 @@ export const updateActiveAdmin = async (id: string, isActive: boolean) => {
   const newAdmin = await getDoc(doc(adminRef, id));
   return { id: newAdmin.id, ...newAdmin.data() };
 };
+
+export const getManagerById = async (id: string) => {
+  const existedManager = await getDoc(doc(adminRef, id));
+  if (!existedManager) return undefined;
+
+  const manager = existedManager.data() as IAdminDoc;
+  return { ...manager, id: existedManager.id };
+};
