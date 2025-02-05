@@ -16,8 +16,8 @@ const TableLoading = () => {
         <TableRow>
           <TableHead>Name</TableHead>
           <TableHead>Slug</TableHead>
-          <TableHead>Created At</TableHead>
-          <TableHead>Updated At</TableHead>
+          <TableHead>Created at</TableHead>
+          <TableHead>Edited At</TableHead>
           <TableHead className="w-28"></TableHead>
         </TableRow>
       </TableHeader>

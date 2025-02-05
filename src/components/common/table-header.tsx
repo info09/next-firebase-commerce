@@ -1,24 +1,19 @@
-import OrderData from "learning/components/common/order-data";
+import OrderData, { IOrderProps } from "learning/components/common/order-data";
 import SearchBar from "learning/components/common/search";
 import { Button } from "learning/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "learning/components/ui/select";
-import { Tabs, TabsList, TabsTrigger } from "learning/components/ui/tabs";
-import { ArrowDown, ArrowUp, PlusCircle } from "lucide-react";
+import { PlusCircle } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
-const TableHeader = () => {
+interface IProps extends IOrderProps {
+  addTitle: string;
+}
+const TableHeader = ({ addTitle, options }: IProps) => {
   return (
     <div className="mb-6">
       <div className="flex items-center">
         <SearchBar />
-        <OrderData />
+        <OrderData options={options} />
         <div className="ml-auto flex items-center gap-2">
           <Button size="sm" className="h-8 gap-1">
             <PlusCircle className="h-3.5 w-3.5" />
@@ -26,7 +21,7 @@ const TableHeader = () => {
               href={"/admin/categories/new"}
               className="sr-only sm:not-sr-only sm:whitespace-nowrap"
             >
-              Add Category
+              {addTitle}
             </Link>
           </Button>
         </div>

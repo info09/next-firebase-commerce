@@ -8,14 +8,14 @@ import {
   CardHeader,
   CardTitle,
 } from "learning/components/ui/card";
-import TablePagination from "./table-pagination";
-import TableHeader from "./table-header";
+import TablePagination from "../../../../components/common/table-pagination";
+import TableHeader from "../../../../components/common/table-header";
 import { getCategories } from "learning/feature/categories/model";
-import TableLoading from "./table-loading";
-import { IGetCategoryInput } from "learning/feature/categories/type";
+import TableLoading from "../../../../components/common/table-loading";
+import { IGetDataInput } from "learning/feature/type";
 
 interface IProps {
-  searchParams: IGetCategoryInput;
+  searchParams: IGetDataInput;
 }
 const Category = async ({ searchParams }: IProps) => {
   const res = await getCategories({
@@ -27,7 +27,7 @@ const Category = async ({ searchParams }: IProps) => {
   console.log("🚀 ~ Category ~ data:", res);
   return (
     <div>
-      <TableHeader />
+      <TableHeader addTitle="Add Category" />
       <Card x-chunk="dashboard-06-chunk-0">
         <CardHeader>
           <CardTitle>Categories</CardTitle>
@@ -40,8 +40,7 @@ const Category = async ({ searchParams }: IProps) => {
         </CardContent>
         <CardFooter className="flex justify-between">
           <div className="text-xs text-muted-foreground">
-            Showing <strong>1-10</strong> of <strong>{res.meta.total}</strong>{" "}
-            categories
+            <strong>{res.meta.total}</strong> categories
           </div>
           <TablePagination total={res.meta.total} />
         </CardFooter>
