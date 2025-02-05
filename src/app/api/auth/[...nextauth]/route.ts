@@ -20,6 +20,10 @@ const adminLogin = async (email: string, password: string) => {
     throw Error("The password is wrong");
   }
 
+  if (!existedAdmin.isActive) {
+    throw Error("This account is not active!");
+  }
+
   return {
     email: existedAdmin.email,
     id: existedAdmin.id,

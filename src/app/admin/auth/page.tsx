@@ -9,13 +9,11 @@ import {
   CardTitle,
 } from "learning/components/ui/card";
 import { Input } from "learning/components/ui/input";
-import { Label } from "learning/components/ui/label";
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { FormEvent, useState } from "react";
 import { ICreateAdminInput } from "learning/feature/managers/type";
-import { toast } from "sonner";
-import { Controller, useForm } from "react-hook-form";
+import { toast, Toaster } from "sonner";
+import { useForm } from "react-hook-form";
 import {
   Form,
   FormControl,
@@ -159,6 +157,7 @@ export default function AuthPage() {
                   </div>
                 </form>
               </Form>
+              <Toaster />
             </CardContent>
           </Card>
         </div>

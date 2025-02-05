@@ -13,7 +13,8 @@ import Link from "next/link";
 import { deleteCategoryById } from "learning/feature/categories/model";
 import { revalidatePath } from "next/cache";
 import { IAdminDb } from "learning/feature/managers/type";
-import TableDeleteAction from "./table-delete-action";
+import { ActiveAdminAction, TableDeleteAction } from "./table-action";
+import { updateActiveAdmin } from "learning/feature/managers/model";
 
 interface IProps {
   data: IAdminDb[];
@@ -24,6 +25,12 @@ const ManagerTable = ({ data }: IProps) => {
     await deleteCategoryById(id);
     revalidatePath("/admin/categories");
   };
+
+  const onChangeActive = async (id: string, isActive: boolean) => {
+    "use server";
+    await updateActiveAdmin(id, isActive);
+    revalidatePath("/admin/managers");
+  };
   return (
     <Table>
       <TableHeader>
@@ -31,6 +38,7 @@ const ManagerTable = ({ data }: IProps) => {
           <TableHead>Email</TableHead>
           <TableHead>Created At</TableHead>
           <TableHead>Updated At</TableHead>
+          <TableHead>Active</TableHead>
           <TableHead className="w-28">Actions</TableHead>
         </TableRow>
       </TableHeader>
@@ -43,6 +51,13 @@ const ManagerTable = ({ data }: IProps) => {
             </TableCell>
             <TableCell>
               {moment.unix(admin.updated_at.seconds).calendar()}
+            </TableCell>
+            <TableCell>
+              <ActiveAdminAction
+                isActive={admin.isActive}
+                id={admin.id}
+                updateActiveAdmin={onChangeActive}
+              />
             </TableCell>
             <TableCell>
               <div className="flex gap-1 cursor-pointer">
