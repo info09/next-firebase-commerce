@@ -19,6 +19,7 @@ import { ICreateInputProduct } from "learning/feature/products/type";
 import { IPaginationRes } from "learning/feature/type";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
+import Upload from "./upload";
 
 interface IProps {
   data?: ICreateInputProduct;
@@ -127,6 +128,21 @@ const FormProduct = ({ data, onSubmit }: IProps) => {
                       value: category.id,
                     }))}
                   />
+                </FormControl>
+                <FormDescription>This is Product Categories.</FormDescription>
+                <FormMessage />
+              </FormItem>
+            )}
+          />
+
+          <FormField
+            control={form.control}
+            name="images"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Product categories</FormLabel>
+                <FormControl>
+                  <Upload onChange={(images) => field.onChange(images)} />
                 </FormControl>
                 <FormDescription>This is Product Categories.</FormDescription>
                 <FormMessage />

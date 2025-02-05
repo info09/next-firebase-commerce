@@ -17,14 +17,15 @@ import {
   where,
 } from "firebase/firestore";
 import { COLLECTION } from "learning/constants/common";
-import { db } from "learning/utils/firebase";
+import { db, storage } from "learning/utils/firebase";
 import { ICreateInputProduct, IProductDb, IProductDoc } from "./type";
 import { AddProductSchema } from "./rule";
 import { formatZodMessage } from "learning/utils/common/zod-message";
 import { getManagerById } from "../managers/model";
-import { getCategoryById, getCategoryByIds } from "../categories/model";
+import { getCategoryByIds } from "../categories/model";
 import { IGetDataInput, IPaginationRes } from "../type";
 import { getLastVisibleDoc } from "learning/utils/common/queries";
+import { getDownloadURL, ref, uploadBytes } from "firebase/storage";
 
 const productRef = collection(db, COLLECTION.PRODUCT);
 
@@ -150,4 +151,11 @@ export const getProducts = async (
 
 export const deleteProductById = (id: string) => {
   return deleteDoc(doc(productRef, id));
+};
+
+export const uploadImageProduct = async (image: File): Promise<string> => {
+  const productStorageRef = ref(storage, image.name);
+  const snapshot = await uploadBytes(productStorageRef, image);
+
+  return await getDownloadURL(ref(storage, snapshot.metadata.fullPath));
 };
