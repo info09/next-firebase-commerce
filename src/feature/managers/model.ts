@@ -21,13 +21,15 @@ import { IGetDataInput, IPaginationRes } from "../type";
 import { getLastVisibleDoc } from "learning/utils/common/queries";
 const adminRef = collection(db, COLLECTION.ADMIN);
 
-export const findAdminByEmail = async (email: string): Promise<IAdminDb> => {
+export const findAdminByEmail = async (
+  email: string
+): Promise<IAdminDb | undefined> => {
   const existedAdmin = await getDocs(
     query(adminRef, where("email", "==", email))
   );
 
   if (!existedAdmin.docs[0]) {
-    throw Error("Email is not exists");
+    return undefined;
   }
   const admin = existedAdmin.docs[0].data() as IAdminDb;
 

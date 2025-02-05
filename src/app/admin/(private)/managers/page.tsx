@@ -23,11 +23,12 @@ const ManagerPage = async ({ searchParams }: IProps) => {
     orderField: searchParams.orderField || "email",
     orderType: searchParams.orderType || "desc",
   });
-  console.log("🚀 ~ Category ~ data:", res);
+  console.log("🚀 ~ Manager ~ data:", res);
   return (
     <div>
       <TableHeader
         addTitle="Add Manager"
+        addPath="/admin/managers/new"
         options={["email", "created_at", "updated_at"]}
       />
       <Card x-chunk="dashboard-06-chunk-0">

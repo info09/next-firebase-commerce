@@ -27,7 +27,7 @@ const Category = async ({ searchParams }: IProps) => {
   console.log("🚀 ~ Category ~ data:", res);
   return (
     <div>
-      <TableHeader addTitle="Add Category" />
+      <TableHeader addTitle="Add Category" addPath="/admin/categories/new" />
       <Card x-chunk="dashboard-06-chunk-0">
         <CardHeader>
           <CardTitle>Categories</CardTitle>
