@@ -39,6 +39,7 @@ import { getServerSession } from "next-auth";
 import { authOptions } from "learning/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import Logout from "learning/components/common/logout";
+import NavLink from "learning/components/common/nav-link";
 
 export const ADMIN_PAGES = [
   {
@@ -58,7 +59,7 @@ export const ADMIN_PAGES = [
   },
   {
     path: "/admin/managers",
-    name: "Products",
+    name: "Managers",
     icon: <Users className="h-5 w-5" />,
   },
 ];
@@ -81,13 +82,18 @@ export default async function RootLayout({
             <TooltipProvider key={page.path}>
               <Tooltip>
                 <TooltipTrigger asChild>
-                  <Link
+                  <NavLink
+                    path={page.path}
+                    icon={page.icon}
+                    title={page.name}
+                  />
+                  {/* <Link
                     href={page.path}
                     className="flex h-9 w-9 items-center justify-center rounded-lg text-muted-foreground transition-colors hover:text-foreground md:h-8 md:w-8"
                   >
                     {page.icon}
                     <span className="sr-only">{page.name}</span>
-                  </Link>
+                  </Link> */}
                 </TooltipTrigger>
                 <TooltipContent side="right">{page.name}</TooltipContent>
               </Tooltip>
@@ -114,23 +120,28 @@ export default async function RootLayout({
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <header className="sticky top-0 z-30 flex h-14 items-center gap-4 border-b bg-background px-4 sm:static sm:h-auto sm:border-0 sm:bg-transparent sm:px-6">
           <Sheet>
-            <SheetTrigger asChild>
+            {/* <SheetTrigger asChild>
               <Button size="icon" variant="outline" className="sm:hidden">
                 <PanelLeft className="h-5 w-5" />
                 <span className="sr-only">Toggle Menu</span>
               </Button>
-            </SheetTrigger>
+            </SheetTrigger> */}
             <SheetContent side="left" className="sm:max-w-xs">
               <nav className="grid gap-6 text-lg font-medium">
                 {ADMIN_PAGES.map((page) => (
-                  <Link
-                    key={page.path}
-                    href={page.path}
-                    className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                  >
-                    {page.icon}
-                    {page.name}
-                  </Link>
+                  <NavLink
+                    path={page.path}
+                    icon={page.icon}
+                    title={page.name}
+                  />
+                  // <Link
+                  //   key={page.path}
+                  //   href={page.path}
+                  //   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
+                  // >
+                  //   {page.icon}
+                  //   {page.name}
+                  // </Link>
                 ))}
               </nav>
             </SheetContent>
