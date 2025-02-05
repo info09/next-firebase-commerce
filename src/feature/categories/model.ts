@@ -10,7 +10,6 @@ import {
   getDocs,
   limit,
   orderBy,
-  Query,
   query,
   startAfter,
   startAt,
