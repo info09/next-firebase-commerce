@@ -34,7 +34,7 @@ const FormProduct = ({ data, onSubmit, adminId }: IProps) => {
   const [categories, setCategories] = useState<ICategoryDb[]>([]);
   const fetchCategories = useCallback(
     debounce((keyword: string) => {
-      fetch(`${BASE_URL}/api/admin/categories?keyword=${keyword}`)
+      fetch(`${BASE_URL}api/admin/categories?keyword=${keyword}`)
         .then((res) => res.json())
         .then((data: IPaginationRes<ICategoryDb>) =>
           setCategories((prev) => unionBy(prev.concat(data.data), "id"))
