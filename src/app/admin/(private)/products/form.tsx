@@ -24,8 +24,9 @@ import { AddProductSchema } from "learning/feature/products/rule";
 interface IProps {
   data?: ICreateInputProduct;
   onSubmit: (data: ICreateInputProduct) => void;
+  adminId: string;
 }
-const FormProduct = ({ data, onSubmit }: IProps) => {
+const FormProduct = ({ data, onSubmit, adminId }: IProps) => {
   const [categories, setCategories] = useState<ICategoryDb[]>([]);
   const fetchCategories = (keyword: string) => {
     fetch(`${BASE_URL}/api/admin/categories?keyword=${keyword}`)
@@ -34,7 +35,7 @@ const FormProduct = ({ data, onSubmit }: IProps) => {
   };
   const form = useForm<ICreateInputProduct>({
     resolver: zodResolver(AddProductSchema),
-    defaultValues: { ...data, createdId: "0paOJA6LlV9iJg9NVMkm" },
+    defaultValues: { ...data, createdId: data?.createdId || adminId },
   });
 
   useEffect(() => {
@@ -126,6 +127,7 @@ const FormProduct = ({ data, onSubmit }: IProps) => {
                 <FormControl>
                   <MultiSelectFormField
                     placeholder="Categories"
+                    defaultValue={field.value}
                     onValueChange={(ids) => field.onChange(ids)}
                     options={categories.map((c) => ({
                       label: c.name,
@@ -146,7 +148,10 @@ const FormProduct = ({ data, onSubmit }: IProps) => {
               <FormItem>
                 <FormLabel>Product images</FormLabel>
                 <FormControl>
-                  <Upload onChange={(images) => field.onChange(images)} />
+                  <Upload
+                    onChange={(images) => field.onChange(images)}
+                    defaultImages={field.value}
+                  />
                 </FormControl>
                 <FormDescription>This is product images.</FormDescription>
                 <FormMessage />

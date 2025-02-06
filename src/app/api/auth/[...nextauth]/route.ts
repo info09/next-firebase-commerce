@@ -1,11 +1,12 @@
-import NextAuth, { NextAuthOptions } from "next-auth";
-import CredentialsProvider from "next-auth/providers/credentials";
-import { ICreateAdminInput } from "learning/feature/managers/type";
 import { findAdminByEmail } from "learning/feature/managers/model";
-import { comparePassword } from "learning/utils/common/password";
 import { loginSchema } from "learning/feature/managers/rule";
+import { ICreateAdminInput } from "learning/feature/managers/type";
+import { comparePassword } from "learning/utils/common/password";
+import { NextAuthOptions } from "next-auth";
+import NextAuth from "next-auth/next";
+import CredentialsProvider from "next-auth/providers/credentials";
 
-const adminLogin = async (email: string, password: string) => {
+export const adminLogin = async (email: string, password: string) => {
   const existedAdmin = await findAdminByEmail(email);
   if (!existedAdmin) {
     throw Error("This email is not exist!");
@@ -21,15 +22,13 @@ const adminLogin = async (email: string, password: string) => {
   }
 
   if (!existedAdmin.isActive) {
-    throw Error("This account is not active!");
+    throw Error("This admin is inactive!");
   }
-
   return {
     email: existedAdmin.email,
     id: existedAdmin.id,
   };
 };
-
 export const authOptions: NextAuthOptions = {
   session: {
     strategy: "jwt",
@@ -39,18 +38,26 @@ export const authOptions: NextAuthOptions = {
       credentials: {},
       async authorize(credentials, req) {
         const { email, password } = credentials as ICreateAdminInput;
-
         const data = loginSchema.safeParse({ email, password });
+
         if (!data.success) {
-          const message = JSON.parse(data.error.message);
-          throw Error(message.map((i: any) => i.message).join(", "));
+          const messages = JSON.parse(data.error.message);
+          throw Error(messages.map((i: any) => i.message).join(","));
         }
         return adminLogin(email, password);
       },
     }),
   ],
-  callbacks: {},
+  callbacks: {
+    session({ session, token, user }) {
+      if (token) {
+        session.user.id = token.sub || "";
+      }
+      return session;
+    },
+  },
 };
 
 const authHandler = NextAuth(authOptions);
+
 export { authHandler as GET, authHandler as POST };
