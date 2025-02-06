@@ -20,6 +20,8 @@ import { ICreateInputProduct } from "learning/feature/products/type";
 import { ICategoryDb } from "learning/feature/categories/type";
 import { IPaginationRes } from "learning/feature/type";
 import { AddProductSchema } from "learning/feature/products/rule";
+import "react-quill/dist/quill.snow.css";
+import ReactQuill from "react-quill";
 
 interface IProps {
   data?: ICreateInputProduct;
@@ -88,7 +90,37 @@ const FormProduct = ({ data, onSubmit, adminId }: IProps) => {
               <FormItem>
                 <FormLabel>Product description</FormLabel>
                 <FormControl>
-                  <Input placeholder="product-1" {...field} />
+                  <ReactQuill
+                    theme="snow"
+                    {...field}
+                    modules={{
+                      toolbar: {
+                        container: [
+                          [{ header: "1" }, { header: "2" }, { font: [] }],
+                          [{ size: [] }],
+                          [
+                            "bold",
+                            "italic",
+                            "underline",
+                            "strike",
+                            "blockquote",
+                          ],
+                          [
+                            { list: "ordered" },
+                            { list: "bullet" },
+                            { indent: "-1" },
+                            { indent: "+1" },
+                          ],
+                          ["link", "image", "video"],
+                          ["code-block"],
+                          ["clean"],
+                        ],
+                      },
+                      clipboard: {
+                        matchVisual: false,
+                      },
+                    }}
+                  />
                 </FormControl>
                 <FormDescription>This is product description.</FormDescription>
                 <FormMessage />
