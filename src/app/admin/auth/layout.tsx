@@ -1,4 +1,4 @@
-import { authOptions } from "learning/app/api/auth/[...nextauth]/route";
+import { authOptions } from "learning/app/api/auth/option";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 export default async function Layout({

@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 import FormCategory from "../category-form";
 
-const page = () => {
+const Page = () => {
   const router = useRouter();
   const onSubmit = async ({
     name,
@@ -30,4 +30,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

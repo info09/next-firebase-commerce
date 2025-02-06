@@ -1,8 +1,8 @@
-import { authOptions } from "learning/app/api/auth/[...nextauth]/route";
 import { getProductById } from "learning/feature/products/model";
 import { getServerSession } from "next-auth";
 import React from "react";
 import UpdateFormProduct from "./update-form";
+import { authOptions } from "learning/app/api/auth/option";
 interface IProps {
   params: {
     id: string;

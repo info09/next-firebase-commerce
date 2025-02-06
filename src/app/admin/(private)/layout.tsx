@@ -22,12 +22,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "learning/components/ui/dropdown-menu";
-import { Input } from "learning/components/ui/input";
-import {
-  Sheet,
-  SheetContent,
-  SheetTrigger,
-} from "learning/components/ui/sheet";
+import { Sheet, SheetContent } from "learning/components/ui/sheet";
 
 import {
   Tooltip,
@@ -36,10 +31,10 @@ import {
   TooltipTrigger,
 } from "learning/components/ui/tooltip";
 import { getServerSession } from "next-auth";
-import { authOptions } from "learning/app/api/auth/[...nextauth]/route";
 import { redirect } from "next/navigation";
 import Logout from "learning/components/common/logout";
 import NavLink from "learning/components/common/nav-link";
+import { authOptions } from "learning/app/api/auth/option";
 
 export const ADMIN_PAGES = [
   {
@@ -130,18 +125,11 @@ export default async function RootLayout({
               <nav className="grid gap-6 text-lg font-medium">
                 {ADMIN_PAGES.map((page) => (
                   <NavLink
+                    key={page.path}
                     path={page.path}
                     icon={page.icon}
                     title={page.name}
                   />
-                  // <Link
-                  //   key={page.path}
-                  //   href={page.path}
-                  //   className="flex items-center gap-4 px-2.5 text-muted-foreground hover:text-foreground"
-                  // >
-                  //   {page.icon}
-                  //   {page.name}
-                  // </Link>
                 ))}
               </nav>
             </SheetContent>
