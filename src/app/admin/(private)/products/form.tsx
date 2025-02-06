@@ -13,7 +13,7 @@ import { Input } from "learning/components/ui/input";
 import MultiSelectFormField from "learning/components/ui/multi-select";
 import { BASE_URL } from "learning/constants/common";
 import { zodResolver } from "@hookform/resolvers/zod";
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Upload from "./upload";
 import { ICreateInputProduct } from "learning/feature/products/type";
@@ -22,6 +22,8 @@ import { IPaginationRes } from "learning/feature/type";
 import { AddProductSchema } from "learning/feature/products/rule";
 import "react-quill/dist/quill.snow.css";
 import ReactQuill from "react-quill";
+import debounce from "lodash-es/debounce";
+import unionBy from "lodash-es/unionBy";
 
 interface IProps {
   data?: ICreateInputProduct;
@@ -30,11 +32,17 @@ interface IProps {
 }
 const FormProduct = ({ data, onSubmit, adminId }: IProps) => {
   const [categories, setCategories] = useState<ICategoryDb[]>([]);
-  const fetchCategories = (keyword: string) => {
-    fetch(`${BASE_URL}/api/admin/categories?keyword=${keyword}`)
-      .then((res) => res.json())
-      .then((data: IPaginationRes<ICategoryDb>) => setCategories(data.data));
-  };
+  const fetchCategories = useCallback(
+    debounce((keyword: string) => {
+      fetch(`${BASE_URL}/api/admin/categories?keyword=${keyword}`)
+        .then((res) => res.json())
+        .then((data: IPaginationRes<ICategoryDb>) =>
+          setCategories((prev) => unionBy(prev.concat(data.data), "id"))
+        );
+    }, 1000),
+    []
+  );
+
   const form = useForm<ICreateInputProduct>({
     resolver: zodResolver(AddProductSchema),
     defaultValues: { ...data, createdId: data?.createdId || adminId },
@@ -165,6 +173,11 @@ const FormProduct = ({ data, onSubmit, adminId }: IProps) => {
                       label: c.name,
                       value: c.id,
                     }))}
+                    onSearch={(search) => {
+                      if (search) {
+                        fetchCategories(search);
+                      }
+                    }}
                   />
                 </FormControl>
                 <FormDescription>This is product categories.</FormDescription>

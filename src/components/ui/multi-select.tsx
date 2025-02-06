@@ -62,6 +62,7 @@ interface MultiSelectFormFieldProps
   className?: string;
   animation?: number;
   onValueChange: (value: string[]) => void;
+  onSearch?: (value: string) => void;
 }
 
 const MultiSelectFormField = React.forwardRef<
@@ -79,6 +80,7 @@ const MultiSelectFormField = React.forwardRef<
       disabled,
       placeholder,
       animation = 0,
+      onSearch,
       ...props
     },
     ref
@@ -197,7 +199,15 @@ const MultiSelectFormField = React.forwardRef<
             }
           }}
         >
-          <Command>
+          <Command
+            filter={(value, search) => {
+              if (onSearch) {
+                onSearch(search);
+              }
+              if (value.includes(search)) return 1;
+              return 0;
+            }}
+          >
             <CommandInput
               placeholder="Search..."
               onKeyDown={handleInputKeyDown}
