@@ -1,5 +1,4 @@
 "use client";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Button } from "learning/components/ui/button";
 import {
   Form,
@@ -13,13 +12,14 @@ import {
 import { Input } from "learning/components/ui/input";
 import MultiSelectFormField from "learning/components/ui/multi-select";
 import { BASE_URL } from "learning/constants/common";
-import { ICategoryDb } from "learning/feature/categories/type";
-import { AddProductSchema } from "learning/feature/products/rule";
-import { ICreateInputProduct } from "learning/feature/products/type";
-import { IPaginationRes } from "learning/feature/type";
+import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Upload from "./upload";
+import { ICreateInputProduct } from "learning/feature/products/type";
+import { ICategoryDb } from "learning/feature/categories/type";
+import { IPaginationRes } from "learning/feature/type";
+import { AddProductSchema } from "learning/feature/products/rule";
 
 interface IProps {
   data?: ICreateInputProduct;
@@ -27,25 +27,28 @@ interface IProps {
 }
 const FormProduct = ({ data, onSubmit }: IProps) => {
   const [categories, setCategories] = useState<ICategoryDb[]>([]);
-  const fetchCategories = async (keyword: string) => {
-    await fetch(`${BASE_URL}/api/admin/categories?keyword=${keyword}`)
+  const fetchCategories = (keyword: string) => {
+    fetch(`${BASE_URL}/api/admin/categories?keyword=${keyword}`)
       .then((res) => res.json())
       .then((data: IPaginationRes<ICategoryDb>) => setCategories(data.data));
   };
   const form = useForm<ICreateInputProduct>({
     resolver: zodResolver(AddProductSchema),
-    defaultValues: { ...data, createdId: "chKXcoQZ8Rv2GDGV0woW" },
+    defaultValues: { ...data, createdId: "0paOJA6LlV9iJg9NVMkm" },
   });
 
   useEffect(() => {
     fetchCategories("");
   }, []);
+
   return (
     <div>
       <Form {...form}>
         <form
           className="grid grid-cols-2 gap-4"
-          onSubmit={form.handleSubmit(onSubmit)}
+          onSubmit={form.handleSubmit(onSubmit, (error) => {
+            console.log(error);
+          })}
         >
           <FormField
             control={form.control}
@@ -54,7 +57,7 @@ const FormProduct = ({ data, onSubmit }: IProps) => {
               <FormItem>
                 <FormLabel>Product name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Product name" {...field} />
+                  <Input placeholder="product 1" {...field} />
                 </FormControl>
                 <FormDescription>This is product display name.</FormDescription>
                 <FormMessage />
@@ -68,10 +71,10 @@ const FormProduct = ({ data, onSubmit }: IProps) => {
               <FormItem>
                 <FormLabel>Product slug</FormLabel>
                 <FormControl>
-                  <Input placeholder="Product slug" {...field} />
+                  <Input placeholder="product description" {...field} />
                 </FormControl>
                 <FormDescription>
-                  This is Product slug (using for url).
+                  This is product slug (using for url).
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -84,9 +87,9 @@ const FormProduct = ({ data, onSubmit }: IProps) => {
               <FormItem>
                 <FormLabel>Product description</FormLabel>
                 <FormControl>
-                  <Input placeholder="Product description" {...field} />
+                  <Input placeholder="product-1" {...field} />
                 </FormControl>
-                <FormDescription>This is Product description.</FormDescription>
+                <FormDescription>This is product description.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -97,16 +100,17 @@ const FormProduct = ({ data, onSubmit }: IProps) => {
             name="defaultPrice"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Product default Price</FormLabel>
+                <FormLabel>Product default price</FormLabel>
                 <FormControl>
                   <Input
-                    placeholder="Product default Price"
+                    type="number"
+                    placeholder="10.000 vnd"
                     {...field}
-                    onChange={(e) => field.onChange(Number(e.target.value))}
+                    onChange={(v) => field.onChange(Number(v.target.value))}
                   />
                 </FormControl>
                 <FormDescription>
-                  This is Product default Price.
+                  This is product default price.
                 </FormDescription>
                 <FormMessage />
               </FormItem>
@@ -121,15 +125,15 @@ const FormProduct = ({ data, onSubmit }: IProps) => {
                 <FormLabel>Product categories</FormLabel>
                 <FormControl>
                   <MultiSelectFormField
-                    placeholder="Select Category"
+                    placeholder="Categories"
                     onValueChange={(ids) => field.onChange(ids)}
-                    options={categories.map((category) => ({
-                      label: category.name,
-                      value: category.id,
+                    options={categories.map((c) => ({
+                      label: c.name,
+                      value: c.id,
                     }))}
                   />
                 </FormControl>
-                <FormDescription>This is Product Categories.</FormDescription>
+                <FormDescription>This is product categories.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
@@ -140,19 +144,17 @@ const FormProduct = ({ data, onSubmit }: IProps) => {
             name="images"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Product categories</FormLabel>
+                <FormLabel>Product images</FormLabel>
                 <FormControl>
                   <Upload onChange={(images) => field.onChange(images)} />
                 </FormControl>
-                <FormDescription>This is Product Categories.</FormDescription>
+                <FormDescription>This is product images.</FormDescription>
                 <FormMessage />
               </FormItem>
             )}
           />
 
-          <Button type="submit" disabled={!form.formState.isValid}>
-            Add Product
-          </Button>
+          <Button type="submit">Add product</Button>
         </form>
       </Form>
     </div>

@@ -1,3 +1,4 @@
+"use client";
 import { Input } from "learning/components/ui/input";
 import { BASE_URL } from "learning/constants/common";
 import Image from "next/image";
@@ -42,7 +43,7 @@ const Upload = ({ onChange }: IProps) => {
             height={140}
             width={140}
             src={img}
-            alt="product-image"
+            alt="product image"
             key={img}
             className="rounded shadow"
           />

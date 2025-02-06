@@ -7,7 +7,7 @@ export interface ICreateInputProduct {
   slug: string;
   description: string;
   createdId: string;
-  images?: string[];
+  images: string[];
   categoryIds: string[];
   properties: Array<{
     name: string;

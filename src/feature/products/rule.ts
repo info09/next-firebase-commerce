@@ -6,11 +6,11 @@ export const AddProductSchema = z.object({
     .min(1, "Product name is required"),
   slug: z.string().min(1, "Product slug is required"),
   description: z.string().min(1, "Product description is required"),
-  image: z.array(z.string()).optional(),
   createdId: z
     .string({ required_error: "manager id is required" })
     .min(1, "manager id is required"),
   categoryIds: z.array(z.string()),
+  images: z.array(z.string()),
   properties: z
     .array(
       z.object({
